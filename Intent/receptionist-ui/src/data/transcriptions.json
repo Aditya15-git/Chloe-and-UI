@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "storage": "local",
+    "note": "Replace with S3 integration when ready. See services/transcriptionService.js for the abstraction layer."
+  },
+  "records": [
+    {
+      "id": "log-0001",
+      "call_sid": "CA1234567890abcdef01",
+      "patient_id": "pat-0001",
+      "booking_id": "bk-0001",
+      "outcome": "appointment_booked",
+      "duration_s": 187,
+      "created_at": "2026-05-27T08:15:32Z",
+      "patient_name": "Emily Thornton",
+      "doctor_name": "Dr. Sarah Mitchell",
+      "appointment_time": "2026-05-27T09:00:00Z",
+      "transcript": [
+        { "role": "assistant", "text": "Good morning, Riverside Medical Clinic. This is the automated booking assistant. How can I help you today?", "time": 0 },
+        { "role": "patient",   "text": "Hi, I'd like to book an appointment with Dr Mitchell please.", "time": 5 },
+        { "role": "assistant", "text": "Of course! Can I get your full name please?", "time": 9 },
+        { "role": "patient",   "text": "Emily Thornton.", "time": 13 },
+        { "role": "assistant", "text": "Thank you Emily. Can I confirm your date of birth?", "time": 16 },
+        { "role": "patient",   "text": "15th of March, 1985.", "time": 19 },
+        { "role": "assistant", "text": "Great. What is the reason for your visit today?", "time": 23 },
+        { "role": "patient",   "text": "I've been having some chest tightness and wanted to get it checked out.", "time": 27 },
+        { "role": "assistant", "text": "Understood. I can see Dr Mitchell has availability tomorrow morning at 9 AM. Does that work for you?", "time": 35 },
+        { "role": "patient",   "text": "Yes, that's perfect.", "time": 42 },
+        { "role": "assistant", "text": "Wonderful! I've booked you in with Dr Mitchell on the 27th of May at 9 AM. You'll receive a confirmation SMS shortly. Is there anything else I can help with?", "time": 46 },
+        { "role": "patient",   "text": "No that's great, thank you.", "time": 55 },
+        { "role": "assistant", "text": "You're welcome Emily. See you then. Goodbye!", "time": 58 }
+      ]
+    },
+    {
+      "id": "log-0002",
+      "call_sid": "CA1234567890abcdef02",
+      "patient_id": "pat-0002",
+      "booking_id": "bk-0002",
+      "outcome": "appointment_booked",
+      "duration_s": 142,
+      "created_at": "2026-05-27T10:42:11Z",
+      "patient_name": "Marcus Webb",
+      "doctor_name": "Dr. James Chen",
+      "appointment_time": "2026-05-27T08:00:00Z",
+      "transcript": [
+        { "role": "assistant", "text": "Good morning, Riverside Medical Clinic. How can I help?", "time": 0 },
+        { "role": "patient",   "text": "Yeah g'day, I need to see a GP pretty urgently. Got a bad ear infection I think.", "time": 4 },
+        { "role": "assistant", "text": "I'm sorry to hear that. Let me check what's available today. Could I get your name please?", "time": 10 },
+        { "role": "patient",   "text": "Marcus Webb.", "time": 15 },
+        { "role": "assistant", "text": "Thanks Marcus. Dr Chen has a slot available this morning at 8 AM. It's a bit early — would that work?", "time": 18 },
+        { "role": "patient",   "text": "Yeah that's fine, I'll take it.", "time": 26 },
+        { "role": "assistant", "text": "Perfect. You're booked with Dr Chen at 8 AM today. Please arrive 5 minutes early. Anything else?", "time": 30 },
+        { "role": "patient",   "text": "No, cheers.", "time": 37 },
+        { "role": "assistant", "text": "Take care Marcus. Goodbye!", "time": 39 }
+      ]
+    },
+    {
+      "id": "log-0003",
+      "call_sid": "CA1234567890abcdef03",
+      "patient_id": "pat-0003",
+      "booking_id": "bk-0003",
+      "outcome": "appointment_booked",
+      "duration_s": 213,
+      "created_at": "2026-05-26T14:22:05Z",
+      "patient_name": "Aisha Patel",
+      "doctor_name": "Dr. Priya Sharma",
+      "appointment_time": "2026-05-28T09:00:00Z",
+      "transcript": [
+        { "role": "assistant", "text": "Good afternoon, Riverside Medical Clinic. How can I assist you?", "time": 0 },
+        { "role": "patient",   "text": "Hello, I'd like to book my daughter in to see Dr Sharma please.", "time": 4 },
+        { "role": "assistant", "text": "Of course! I can help with that. Could I get your daughter's full name and date of birth?", "time": 9 },
+        { "role": "patient",   "text": "Her name is Zara Patel and she was born on the 3rd of June 2018.", "time": 14 },
+        { "role": "assistant", "text": "Thank you. And what's the reason for the appointment?", "time": 21 },
+        { "role": "patient",   "text": "She's had a fever for two days and I'm a bit worried.", "time": 25 },
+        { "role": "assistant", "text": "I understand. Dr Sharma has availability tomorrow morning at 9 AM. Would that suit you?", "time": 31 },
+        { "role": "patient",   "text": "Yes, tomorrow at 9 works perfectly.", "time": 38 },
+        { "role": "assistant", "text": "Wonderful. I've booked Zara in with Dr Sharma on the 28th of May at 9 AM. You'll get a confirmation message. Is there anything else?", "time": 43 },
+        { "role": "patient",   "text": "No, that's all thank you.", "time": 52 },
+        { "role": "assistant", "text": "Take care! Goodbye.", "time": 54 }
+      ]
+    },
+    {
+      "id": "log-0004",
+      "call_sid": "CA1234567890abcdef04",
+      "patient_id": "pat-0004",
+      "booking_id": null,
+      "outcome": "no_appointment",
+      "duration_s": 65,
+      "created_at": "2026-05-26T16:05:44Z",
+      "patient_name": "Unknown",
+      "doctor_name": null,
+      "appointment_time": null,
+      "transcript": [
+        { "role": "assistant", "text": "Good afternoon, Riverside Medical Clinic. How can I help?", "time": 0 },
+        { "role": "patient",   "text": "What are your opening hours?", "time": 3 },
+        { "role": "assistant", "text": "We are open Monday to Friday 8 AM to 6 PM, and Saturday 9 AM to 1 PM.", "time": 7 },
+        { "role": "patient",   "text": "Alright, thanks.", "time": 13 },
+        { "role": "assistant", "text": "You're welcome! Is there anything else I can help you with?", "time": 15 },
+        { "role": "patient",   "text": "No that's all.", "time": 19 },
+        { "role": "assistant", "text": "Have a great day! Goodbye.", "time": 21 }
+      ]
+    }
+  ]
+}

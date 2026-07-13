@@ -1,0 +1,48 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "call_sid": "CA_TEST_1234",
+    "clinic": "My Medical Clinic"
+  },
+  "records": [
+    {
+      "id": "CA_TEST_1234",
+      "call_sid": "CA_TEST_1234",
+      "patient_id": "pat-test-001",
+      "booking_id": null,
+      "outcome": "appointment_booked",
+      "duration_s": 0,
+      "created_at": "2026-05-31T18:20:39Z",
+      "patient_name": "Robert Johnson",
+      "doctor_name": null,
+      "appointment_time": null,
+      "transcript": [
+        {
+          "role": "assistant",
+          "text": "Good morning, My Medical Clinic. How can I help you today?",
+          "time": 0
+        },
+        {
+          "role": "patient",
+          "text": "Hi, I'd like to book an appointment.",
+          "time": 0
+        },
+        {
+          "role": "assistant",
+          "text": "Of course! Can I get your full name please?",
+          "time": 0
+        },
+        {
+          "role": "patient",
+          "text": "Robert Johnson.",
+          "time": 0
+        },
+        {
+          "role": "assistant",
+          "text": "Your appointment with Dr. Jones on 1 June at 10 am has been confirmed.",
+          "time": 0
+        }
+      ]
+    }
+  ]
+}

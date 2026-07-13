@@ -1,0 +1,39 @@
+# Web server
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+python-multipart==0.0.12
+
+# Telephony
+twilio==9.3.4
+websockets==13.1
+
+# HTTP client (TTS API calls)
+httpx==0.27.2
+
+# AWS (Bedrock LLM + Polly TTS + S3 transcripts)
+boto3==1.35.36
+botocore==1.35.36
+
+# STT
+deepgram-sdk==3.7.0
+
+# Database
+supabase==2.9.0
+
+# Config
+pydantic==2.9.2
+pydantic-settings==2.5.2
+python-dotenv==1.0.1
+
+# Audio processing (TTS conversion)
+numpy==2.1.2
+
+# Logging
+structlog==24.4.0
+aiofiles==24.1.0
+
+# Retry
+tenacity==9.0.0
+
+# Local testing only (mic/speaker — not needed in production)
+sounddevice==0.5.1
