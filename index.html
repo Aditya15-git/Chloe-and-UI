@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vestio — AI receptionist for Australian GP clinics</title>
+<meta name="description" content="Vestio answers every call for your GP clinic — booking appointments, answering common questions and passing urgent calls straight to your team.">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mist:#EEF3F1;
+  --mist-2:#E3EBE8;
+  --white:#FFFFFF;
+  --sage:#8DB5A8;
+  --sage-soft:#D5E6E0;
+  --sage-deep:#3F6F63;
+  --bronze:#B08D5B;
+  --bronze-text:#86663A;
+  --ink:#022430;
+  --ink-2:#0B3A40;
+  --muted:#4E6166;
+  --line:rgba(2,36,48,.12);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:Manrope,system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--bronze-text)}
+h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(44px,6.4vw,80px)}
+h2{font-size:clamp(34px,4.4vw,54px)}
+h3{margin:0;font-size:20px;font-weight:600;line-height:1.3}
+p{margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 28px;border-radius:999px;font-weight:600;font-size:16px;transition:transform .15s ease,background .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--ink);color:var(--mist)}
+.btn-primary:hover{background:var(--ink-2)}
+.btn-ghost{border:1.5px solid var(--ink);color:var(--ink);background:transparent}
+.btn-ghost:hover{background:var(--white)}
+:focus-visible{outline:3px solid var(--bronze);outline-offset:3px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:10;background:rgba(238,243,241,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:78px}
+.nav img{height:32px;width:auto}
+.nav-links{display:flex;align-items:center;gap:36px;font-weight:500;font-size:15px}
+.nav-links a:not(.btn):hover{color:var(--sage-deep)}
+.nav .btn{min-height:44px;padding:0 22px;font-size:15px}
+
+/* hero */
+.hero{padding:96px 0 112px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-180px;top:-120px;width:620px;height:620px;border-radius:50%;background:var(--sage-soft);opacity:.7;z-index:0}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+.hero-copy{display:flex;flex-direction:column;gap:26px}
+.hero-copy .lede{font-size:19px;color:var(--muted);max-width:520px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:14px;padding-top:6px}
+
+/* call card */
+.call{background:var(--white);border-radius:28px;padding:32px;box-shadow:0 30px 60px -30px rgba(2,36,48,.25);display:flex;flex-direction:column;gap:22px;border:1px solid var(--line)}
+.call-top{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.live{display:flex;align-items:center;gap:10px;font-weight:600}
+.live i{width:9px;height:9px;border-radius:50%;background:var(--sage);box-shadow:0 0 0 5px var(--sage-soft)}
+.call-top span:last-child{color:var(--muted)}
+.player{display:flex;align-items:center;gap:18px;background:var(--mist);border-radius:20px;padding:16px 18px}
+.play{flex:none;width:56px;height:56px;border-radius:50%;border:0;background:var(--ink);color:var(--mist);display:grid;place-items:center;cursor:pointer;transition:background .15s}
+.play:hover{background:var(--ink-2)}
+.play svg{width:20px;height:20px}
+.play .i-pause{display:none}
+.player.playing .i-play{display:none}
+.player.playing .i-pause{display:block}
+.wave{flex:1;display:flex;align-items:center;gap:4px;height:56px}
+.wave span{flex:1;max-width:5px;border-radius:3px;background:var(--sage);opacity:.45;transition:opacity .2s,background .2s}
+.wave span.on{opacity:1;background:var(--sage-deep)}
+.player.playing .wave span{animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{50%{transform:scaleY(.6)}}
+.player-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:-10px;padding:0 4px}
+.bubbles{display:flex;flex-direction:column;gap:12px;font-size:15px;line-height:1.5}
+.b{max-width:84%;padding:13px 17px;border-radius:18px}
+.b-patient{align-self:flex-start;background:var(--mist);border-bottom-left-radius:4px}
+.b-vestio{align-self:flex-end;background:var(--sage-soft);border-bottom-right-radius:4px}
+.b small{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.done{display:flex;align-items:center;gap:10px;padding-top:16px;border-top:1px solid var(--line);font-weight:600;font-size:14px;color:var(--sage-deep)}
+.audio-note{font-size:13px;color:var(--bronze-text);display:none}
+.audio-note.show{display:block}
+
+/* features */
+.features{background:var(--white);padding:104px 0}
+.section-head{display:flex;flex-direction:column;gap:16px;max-width:720px;margin-bottom:56px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.card{background:var(--mist);border-radius:24px;padding:34px;display:flex;flex-direction:column;gap:14px}
+.icon{width:52px;height:52px;border-radius:16px;background:var(--sage-soft);color:var(--sage-deep);display:grid;place-items:center;margin-bottom:6px}
+.icon svg{width:24px;height:24px}
+.card p{color:var(--muted);font-size:16px}
+
+/* how */
+.how{padding:112px 0}
+.how .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:80px;align-items:start}
+.how .section-head{margin:0;position:sticky;top:120px}
+.steps{display:flex;flex-direction:column}
+.step{display:grid;grid-template-columns:64px 1fr;gap:20px;padding:30px 0;border-bottom:1px solid var(--line)}
+.step:first-child{padding-top:0}
+.step:last-child{border-bottom:0}
+.num{font-family:var(--serif);font-size:44px;line-height:1;color:var(--bronze)}
+.step p{color:var(--muted);margin-top:6px}
+
+/* who */
+.who{padding:0 0 112px}
+.who-box{background:var(--sage-soft);border-radius:32px;padding:64px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.who-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
+.who-list li{display:flex;gap:14px;align-items:flex-start;font-weight:500}
+.who-list svg{flex:none;width:22px;height:22px;color:var(--sage-deep);margin-top:3px}
+.who-box p{color:var(--ink-2)}
+
+/* faq */
+.faq{background:var(--white);padding:104px 0}
+.faq .wrap{max-width:880px}
+.faq .section-head{margin-bottom:40px}
+details{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 0;font-size:19px;font-weight:600}
+summary::-webkit-details-marker{display:none}
+summary .plus{flex:none;width:32px;height:32px;border-radius:50%;background:var(--mist);display:grid;place-items:center;transition:transform .2s}
+details[open] summary .plus{transform:rotate(45deg);background:var(--sage-soft)}
+details p{padding:0 56px 26px 0;color:var(--muted)}
+
+/* cta */
+.cta{padding:104px 0}
+.cta-box{background:var(--ink);color:var(--mist);border-radius:36px;padding:88px 48px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:22px;position:relative;overflow:hidden}
+.cta-box::after{content:"";position:absolute;inset:auto -100px -220px auto;width:420px;height:420px;border-radius:50%;border:1.5px solid rgba(141,181,168,.35)}
+.cta-box h2{color:#F4EFE7;max-width:760px}
+.cta-box p{color:#B9C9C4;max-width:520px}
+.cta-box .eyebrow{color:var(--bronze)}
+.cta-box .btns{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;padding-top:8px}
+.btn-sage{background:var(--sage);color:var(--ink)}
+.btn-sage:hover{background:#9FC2B6}
+.btn-outline-light{border:1.5px solid rgba(238,243,241,.5);color:var(--mist)}
+.btn-outline-light:hover{background:rgba(238,243,241,.08)}
+
+/* footer */
+footer{padding:48px 0 56px;border-top:1px solid var(--line)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+footer img{height:26px;width:auto}
+.foot-tag{font-family:var(--serif);font-size:22px;color:var(--ink-2)}
+.foot-links{display:flex;gap:28px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.foot-links a:hover{color:var(--ink)}
+
+/* responsive */
+@media (max-width:960px){
+  .hero .wrap,.how .wrap,.who-box{grid-template-columns:1fr}
+  .how .section-head{position:static}
+  .grid3{grid-template-columns:1fr}
+  .who-box{padding:40px 28px}
+  .hero{padding:64px 0 80px}
+}
+@media (max-width:720px){
+  .nav-links a:not(.btn){display:none}
+  .features,.how,.faq,.cta{padding:72px 0}
+  .who{padding-bottom:72px}
+  .call{padding:22px}
+  .cta-box{padding:56px 24px;border-radius:28px}
+  details p{padding-right:0}
+  footer .wrap{flex-direction:column;align-items:flex-start}
+  .hero::before{width:380px;height:380px;right:-160px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#top" aria-label="Vestio home"><img src="assets/logo.png" alt="Vestio"></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#clinics">For clinics</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-primary" href="#demo">Book a demo</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <div class="eyebrow">AI receptionist for Australian GP clinics</div>
+        <h1>Every call answered. Every patient looked after.</h1>
+        <p class="lede">Vestio picks up when your front desk can't: it books appointments, answers common questions and passes urgent calls straight to your team.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#demo">Book a demo</a>
+          <a class="btn btn-ghost" href="#sample" data-play>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>
+            Hear a sample call
+          </a>
+        </div>
+      </div>
+
+      <div class="call" id="sample">
+        <div class="call-top">
+          <span class="live"><i></i>Sample call</span>
+          <span>[Clinic name]</span>
+        </div>
+        <div class="player" id="player">
+          <button class="play" id="playBtn" type="button" aria-label="Play sample call">
+            <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>
+            <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4.5" height="16" rx="1.2"/><rect x="13.5" y="4" width="4.5" height="16" rx="1.2"/></svg>
+          </button>
+          <div class="wave" id="wave" aria-hidden="true"></div>
+        </div>
+        <div class="player-meta"><span id="cur">0:00</span><span id="dur">--:--</span></div>
+        <p class="audio-note" id="audioNote">Sample audio coming soon.</p>
+        <!-- Drop your recording at assets/sample-call.mp3 with your recording (keep the same name, or change the src). -->
+        <audio id="audio" src="assets/sample-call.mp3" preload="metadata"></audio>
+
+        <div class="bubbles">
+          <div class="b b-patient"><small>Patient</small>Hi, I'd like to book in with Dr [Name] this week.</div>
+          <div class="b b-vestio"><small>Vestio</small>Of course. I have Thursday at 10:40 or Friday at 2:15. Which suits you?</div>
+        </div>
+        <div class="done">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Appointment booked
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="clinics">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Why Vestio</div>
+        <h2>A calmer front desk, without hiring more staff.</h2>
+      </div>
+      <div class="grid3">
+        <article class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div>
+          <h3>Answers around the clock</h3>
+          <p>Early mornings, lunch breaks and after hours: patients reach someone every time they call.</p>
+        </article>
+        <article class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg></div>
+          <h3>Books appointments</h3>
+          <p>Finds a time with the right doctor and confirms it with the patient while they're still on the call.</p>
+        </article>
+        <article class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 11a4 4 0 1 0-4-4"/><path d="M3 21v-1a6 6 0 0 1 6-6h2"/><circle cx="9" cy="7" r="4"/><polyline points="16 15 19 18 16 21"/><line x1="13" y1="18" x2="19" y2="18"/></svg></div>
+          <h3>Knows when to hand over</h3>
+          <p>Urgent or complex calls go straight to your reception team, along with a short summary.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">How it works</div>
+        <h2>Keep your number. We handle the rest.</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><span class="num">1</span><div><h3>Patients call the same number</h3><p>Nothing changes for your patients. They dial your clinic the way they always have.</p></div></div>
+        <div class="step"><span class="num">2</span><div><h3>Vestio looks after the caller</h3><p>A warm, natural voice books and reschedules appointments and answers everyday questions.</p></div></div>
+        <div class="step"><span class="num">3</span><div><h3>Your team stays in the loop</h3><p>Every call is logged, and anything urgent is passed to your staff straight away.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="who">
+    <div class="wrap">
+      <div class="who-box">
+        <div class="section-head" style="margin:0">
+          <div class="eyebrow">Who it's for</div>
+          <h2>Built for busy GP clinics.</h2>
+          <p>Made for Australian general practices where the phones never stop and the front desk is doing three things at once.</p>
+        </div>
+        <ul class="who-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Morning rushes when every line is ringing</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Small teams covering reception and patients in person</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Clinics that want to stop missing calls after hours</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Practices growing faster than they can hire</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">FAQ</div>
+        <h2>Questions clinics ask us.</h2>
+      </div>
+      <details>
+        <summary>Do we need a new phone number?<span class="plus" aria-hidden="true">+</span></summary>
+        <p>No. Patients keep calling your existing clinic number.</p>
+      </details>
+      <details>
+        <summary>What happens with urgent calls?<span class="plus" aria-hidden="true">+</span></summary>
+        <p>Vestio passes urgent or complex calls straight to your reception team, along with a short summary of what the patient needs.</p>
+      </details>
+      <details>
+        <summary>Can we choose what Vestio handles?<span class="plus" aria-hidden="true">+</span></summary>
+        <p>[Answer, e.g. which call types it handles and which always go to staff.]</p>
+      </details>
+      <details>
+        <summary>How is patient information kept private?<span class="plus" aria-hidden="true">+</span></summary>
+        <p>[Your privacy and data storage statement.]</p>
+      </details>
+      <details>
+        <summary>How long does it take to get started?<span class="plus" aria-hidden="true">+</span></summary>
+        <p>[Your typical setup time.]</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="cta" id="demo">
+    <div class="wrap">
+      <div class="cta-box">
+        <div class="eyebrow">See it in action</div>
+        <h2>Hear Vestio answer your clinic's phone.</h2>
+        <p>A short walkthrough with our team. No commitment.</p>
+        <div class="btns">
+          <a class="btn btn-sage" href="mailto:contact@vestio.com.au?subject=Vestio%20demo">Book a demo</a>
+          <a class="btn btn-outline-light" href="#sample" data-play>Hear a sample call</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/logo.png" alt="Vestio">
+    <p class="foot-tag">Care starts with the first hello.</p>
+    <div class="foot-links">
+      <a href="mailto:contact@vestio.com.au">contact@vestio.com.au</a>
+      <a href="#">Privacy</a>
+      <span>© 2026 Vestio</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var heights=[18,30,46,26,60,78,40,92,64,34,100,52,84,38,70,46,28,56,34,22,14,26,44,70,36,58,30,20];
+  var wave=document.getElementById('wave');
+  heights.forEach(function(h,i){var s=document.createElement('span');s.style.height=h+'%';s.style.animationDelay=(i*0.05)+'s';wave.appendChild(s);});
+  var bars=wave.children;
+  var audio=document.getElementById('audio'),player=document.getElementById('player'),btn=document.getElementById('playBtn');
+  var cur=document.getElementById('cur'),dur=document.getElementById('dur'),note=document.getElementById('audioNote');
+  function fmt(t){if(!isFinite(t))return'--:--';var m=Math.floor(t/60),s=Math.floor(t%60);return m+':'+(s<10?'0':'')+s;}
+  function toggle(){
+    if(audio.paused){audio.play().catch(function(){note.classList.add('show');});}
+    else audio.pause();
+  }
+  btn.addEventListener('click',toggle);
+  document.querySelectorAll('[data-play]').forEach(function(a){a.addEventListener('click',function(){setTimeout(function(){if(audio.paused)toggle();},450);});});
+  audio.addEventListener('play',function(){player.classList.add('playing');btn.setAttribute('aria-label','Pause sample call');});
+  audio.addEventListener('pause',function(){player.classList.remove('playing');btn.setAttribute('aria-label','Play sample call');});
+  audio.addEventListener('ended',function(){audio.currentTime=0;});
+  audio.addEventListener('loadedmetadata',function(){dur.textContent=fmt(audio.duration);});
+  audio.addEventListener('error',function(){note.classList.add('show');});
+  audio.addEventListener('timeupdate',function(){
+    cur.textContent=fmt(audio.currentTime);
+    var p=audio.duration?audio.currentTime/audio.duration:0,n=Math.round(p*bars.length);
+    for(var i=0;i<bars.length;i++)bars[i].classList.toggle('on',i<n);
+  });
+})();
+</script>
+</body>
+</html>
